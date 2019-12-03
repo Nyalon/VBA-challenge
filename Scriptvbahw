@@ -1,0 +1,95 @@
+Sub Stockhw():
+
+    Dim tvolume As Double
+    Dim stockticker As String
+    Dim stock_summary As Double
+    Dim stock_open As Double
+    Dim stock_close As Double
+    Dim stock_dif As Double
+    
+    On Error Resume Next
+        
+        stock_summary = 2
+        tvolume = 0
+        stock_open = 0
+        stock_close = 0
+        stock_dif = 0
+    
+    For Each ws In Worksheets
+
+        ws.Activate
+        
+         LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+        For i = 2 To LastRow
+        
+            If ws.Cells(i, 1).Value <> ws.Cells(i - 1, 1).Value Then
+                
+                stock_open = ws.Cells(i, 3).Value
+                
+                    End If
+                    
+             If ws.Range("j" & stock_summary).Value > 0 Then
+                
+                ws.Range("j" & stock_summary).Interior.ColorIndex = 4
+                
+                Else
+                
+                ws.Range("j" & stock_summary).Interior.ColorIndex = 3
+                
+                End If
+        
+            'checking for change in stock symbol
+                If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
+                
+                    'setting stock ticker value
+                    stockticker = ws.Cells(i, 1).Value
+                        
+                         'setting stock close value
+                        stock_close = ws.Cells(i, 6).Value
+                        
+                            'paste stock close and open difference
+                            
+                            ws.Range("j" & stock_summary).Value = stock_close - stock_open
+                            
+                            stock_dif = ws.Range("j" & stock_summary).Value
+                            
+                            ws.Range("k" & stock_summary).Value = stock_dif / stock_open
+                            
+                            ws.Range("k" & stock_summary).NumberFormat = "0.00%"
+                    
+                        'adding to the stock volume for last cell in ticker
+                        tvolume = tvolume + ws.Cells(i, 7).Value
+                        
+                            'paste stock ticker value in summary table
+                            ws.Range("i" & stock_summary).Value = stockticker
+                            
+                                'paste stock volume in summary table
+                                ws.Range("L" & stock_summary).Value = tvolume
+                                
+                                    'going to the next line in stock summary
+                                    stock_summary = stock_summary + 1
+                                        
+                                        'setting volume to zero for next ticker, stock open and close
+                                        tvolume = 0
+                                        
+                                        stock_close = 0
+                                        
+                                        stock_open = 0
+                                        
+                                        stock_dif = 0
+                                        
+                    
+                Else
+                    
+                   tvolume = tvolume + ws.Cells(i, 7).Value
+                   
+                End If
+                   
+            Next i
+            
+            stock_summary = 2
+            
+        Next ws
+
+End Sub
