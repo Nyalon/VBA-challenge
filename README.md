@@ -2,6 +2,8 @@
 
 My objecteive was to create a script that iterates through hundreds of thousands of stocks, and collect certian datapoints using VBA.
 
+#### Important questions to answer
+
 - Yearly change in price
 - Total stock volume
 - Top performing stocks based on the year
